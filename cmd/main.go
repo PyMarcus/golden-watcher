@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"fyne.io/fyne/v2"
+)
+
+type Config struct {
+	App      fyne.App
+	InfoLog  *log.Logger
+	ErrorLog *log.Logger
+}
 
 func main() {
-	fmt.Println("Hello, world!")
+
 }
