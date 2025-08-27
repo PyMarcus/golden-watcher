@@ -1,4 +1,4 @@
-package service
+package main
 
 import (
 	"bytes"
@@ -36,18 +36,18 @@ func NewTestClient(fn RoundTripFunc) *http.Client {
 	return &http.Client{Transport: fn}
 }
 
-func TestGetPrices(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
-		return &http.Response{
-			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(bytes.NewBufferString(jsonToReturn)),
-			Header:     make(http.Header),
-		}
-	})
+var Client = NewTestClient(func(req *http.Request) *http.Response {
+	return &http.Response{
+		StatusCode: http.StatusOK,
+		Body:       io.NopCloser(bytes.NewBufferString(jsonToReturn)),
+		Header:     make(http.Header),
+	}
+})
 
+func TestGetPrices(t *testing.T) {
 	g := Gold{
 		Items:  nil,
-		Client: client,
+		Client: Client,
 	}
 
 	_, err := g.GetPrices()

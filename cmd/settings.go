@@ -1,4 +1,4 @@
-package settings
+package main
 
 const (
 	WIDTH  float32 = 770

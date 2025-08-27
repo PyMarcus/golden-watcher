@@ -7,13 +7,14 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
-	"github.com/PyMarcus/internal/service"
 )
 
 func (app *Config) GetPriceText() (*canvas.Text, *canvas.Text, *canvas.Text) {
 	var open, current, change *canvas.Text
 
-	_gold := service.Gold{}
+	_gold := Gold{}
+	_gold.Client = app.HTTPClient
+
 	gold, err := _gold.GetPrices()
 
 	if err != nil {
