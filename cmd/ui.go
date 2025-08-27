@@ -20,10 +20,17 @@ func (app *Config) makeUi() {
 	toolbar := app.getToolBar()
 	app.Toolbar = toolbar
 
+	priceTabContente := app.pricesTab()
+
 	tabs := container.NewAppTabs(
-		container.NewTabItemWithIcon("Preços", theme.HomeIcon(), canvas.NewText("Os preços aparecem aqui.", nil)),
+		container.NewTabItemWithIcon("Preços", theme.HomeIcon(), priceTabContente),
 		container.NewTabItemWithIcon("Lista", theme.InfoIcon(), canvas.NewText("Preços tabelados.", nil)),
 	)
+
+	tabs.SetTabLocation(container.TabLocationTop)
+
+	priceChart := app.pricesTab()
+	app.PriceChartContainer = priceChart
 
 	finalContent := container.NewVBox(priceContainer, toolbar, tabs)
 
