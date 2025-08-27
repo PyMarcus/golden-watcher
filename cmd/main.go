@@ -7,12 +7,14 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/widget"
 )
 
 type Config struct {
 	App            fyne.App
 	MainWindow     fyne.Window
 	PriceContainer *fyne.Container
+	Toolbar        *widget.Toolbar
 	InfoLog        *log.Logger
 	ErrorLog       *log.Logger
 	HTTPClient     *http.Client
