@@ -1,11 +1,13 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGetPriceText(t *testing.T) {
 	open, _, _ := testApp.GetPriceText()
-
-	if open.Text != "Open: R$18295.6726 BRL" {
-		t.Errorf("Expected: %s, but have %s", "Open: R$18295.6726 BRL", open.Text)
+	res := open.Text
+	if res != "Abertura: R$18295.6726 BRL" {
+		t.Errorf("Expected: %s, but have %s", "Abertura: R$18295.6726 BRL", res)
 	}
 }
