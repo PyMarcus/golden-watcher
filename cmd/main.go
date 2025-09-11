@@ -19,6 +19,8 @@ type Config struct {
 	PriceContainer      *fyne.Container
 	PriceChartContainer *fyne.Container
 	Toolbar             *widget.Toolbar
+	HoldingsTable       *widget.Table
+	Holdings            [][]interface{}
 	InfoLog             *log.Logger
 	ErrorLog            *log.Logger
 	HTTPClient          *http.Client

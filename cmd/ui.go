@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 )
@@ -23,11 +22,12 @@ func (app *Config) makeUi() {
 	toolbar := app.getToolBar()
 	app.Toolbar = toolbar
 
-	priceTabContente := app.pricesTab()
+	priceTabContent := app.pricesTab()
+	holdingTableContent := app.holdingsTab()
 
 	tabs := container.NewAppTabs(
-		container.NewTabItemWithIcon("Preços", theme.HomeIcon(), priceTabContente),
-		container.NewTabItemWithIcon("Lista", theme.InfoIcon(), canvas.NewText("Preços tabelados.", nil)),
+		container.NewTabItemWithIcon("Preços", theme.HomeIcon(), priceTabContent),
+		container.NewTabItemWithIcon("Histórico", theme.InfoIcon(), holdingTableContent),
 	)
 
 	tabs.SetTabLocation(container.TabLocationTop)
@@ -60,4 +60,9 @@ func (app *Config) refreshPrices() {
 		app.PriceChartContainer.Refresh()
 	}, false)
 
+}
+
+func (app *Config) refreshTable() {
+	app.Holdings = app.getHoldingSlice()
+	app.HoldingsTable.Refresh()
 }
