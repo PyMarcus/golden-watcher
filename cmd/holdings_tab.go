@@ -13,6 +13,7 @@ import (
 )
 
 func (app *Config) holdingsTab() *fyne.Container {
+	app.Holdings = app.getHoldingSlice()
 	app.HoldingsTable = app.getHoldingTable()
 
 	_container := container.NewBorder(nil, nil, nil, nil, container.NewAdaptiveGrid(1, app.HoldingsTable))
@@ -52,29 +53,33 @@ func (app *Config) currentHoldings() ([]repository.Holdings, error) {
 }
 
 func (app *Config) getHoldingTable() *widget.Table {
-	data := app.getHoldingSlice()
-	app.Holdings = data
+
+	if len(app.Holdings) == 0 {
+		app.Holdings = [][]interface{}{{"ID", "Quantidade", "Preço de compra", "Comprou em", "Apagar?"}}
+	}
 
 	table := widget.NewTable(
 		func() (int, int) {
-			return len(data), len(data[0])
+			return len(app.Holdings), len(app.Holdings[0])
 		},
 		func() fyne.CanvasObject {
 			_container := container.NewVBox(widget.NewLabel(""))
 			return _container
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-			if i.Col == (len(data[0])-1) && i.Row != 0 {
+			if i.Col == (len(app.Holdings[0])-1) && i.Row != 0 {
 				w := widget.NewButtonWithIcon("Remover", theme.DeleteIcon(), func() {
 					dialog.ShowConfirm("Remover?", "", func(deleted bool) {
-						id, _ := strconv.Atoi(data[i.Row][0].(string))
-						err := app.Repository.DeleteHolding(int64(id))
+						if deleted {
+							id, _ := strconv.Atoi(app.Holdings[i.Row][0].(string))
+							err := app.Repository.DeleteHolding(int64(id))
 
-						if err != nil {
-							app.ErrorLog.Println(err)
+							if err != nil {
+								app.ErrorLog.Println(err)
+							}
+
+							app.refreshTable()
 						}
-
-						app.refreshTable()
 
 					}, app.MainWindow)
 				})
@@ -83,15 +88,16 @@ func (app *Config) getHoldingTable() *widget.Table {
 				o.(*fyne.Container).Objects = []fyne.CanvasObject{w}
 			} else {
 				o.(*fyne.Container).Objects = []fyne.CanvasObject{
-					widget.NewLabel(data[i.Row][i.Col].(string)),
+					widget.NewLabel(app.Holdings[i.Row][i.Col].(string)),
 				}
 			}
 		})
 
-	colWidth := []float32{50, 200, 200, 200}
+	colWidth := []float32{50, 200, 200, 100}
 	for i := 0; i < len(colWidth); i++ {
 		table.SetColumnWidth(i, colWidth[i])
 	}
-
+	table.SetColumnWidth(3, 180)
+	table.SetColumnWidth(len(app.Holdings[0])-1, 100)
 	return table
 }
